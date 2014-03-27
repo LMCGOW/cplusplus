@@ -67,7 +67,11 @@ void cD3DXSpriteMgr::beginDraw() 						// begin sprite drawing
 */
 void cD3DXSpriteMgr::drawSprite(LPDIRECT3DTEXTURE9 pTexture, CONST RECT * pSrcRect, CONST D3DXVECTOR3 * pCenter, CONST D3DXVECTOR3 * pPosition, D3DCOLOR Colour)
 {
+	try{
 	cD3DXSpriteMgr::dxSpriteRenderer->Draw(pTexture, pSrcRect, pCenter, pPosition, Colour);
+	}catch(int e){
+		cout << e << endl;
+	}
 }
 /*
 =================

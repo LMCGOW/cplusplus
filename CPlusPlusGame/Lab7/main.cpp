@@ -15,6 +15,8 @@ Main entry point for the Card application
 #include "cExplosion.h"
 #include "cXAudio.h"
 #include "cD3DXFont.h"
+#include "Ship.h"
+#include "ScreenManager.h"
 
 using namespace std;
 
@@ -31,7 +33,16 @@ RECT clientBounds; //The dimensions of the window
 
 TCHAR szTempOutput[30];
 
-cD3DXTexture* shipTexture; //Stores the ship texture
+Ship* player;
+
+ScreenManager* screenMgr;
+
+
+#pragma region
+void InstantiateGameObjects();
+void UpdateGameObjects();
+#pragma endregion Forward Declarations
+
 
 /*
 ==================================================================
@@ -45,11 +56,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	// Check any available messages from the queue
 	switch (message)
 	{
-		case WM_LBUTTONDOWN:
+	case WM_KEYDOWN:
 			{
-				
+				if(wParam=='E'){
+					screenMgr->SetActiveScreen(1);
+				}else if(wParam =='B'){
+					screenMgr->SetActiveScreen(0);
+				}
 
-				
+				player->HandleInput(wParam);
+
 				return 0;
 			}
 		case WM_CLOSE:
@@ -126,6 +142,8 @@ bool initWindow( HINSTANCE hInstance )
 */
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow )
 {
+
+#pragma region
 	// Initialize the window
 	if ( !initWindow( hInstance ) )
 		return false;
@@ -134,6 +152,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 		return false;
 	if ( !d3dxSRMgr->initD3DXSpriteMgr(d3dMgr->getTheD3DDevice()))
 		return false;
+#pragma endregion initialisationStuff
+
+
+#pragma region 
 
 	// Grab the frequency of the high def timer
 	__int64 freq = 0;				// measured in counts per second;
@@ -150,22 +172,20 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 
 	float fpsRate = 1.0f/25.0f;
 
-	//The position that the ship will start at
-	D3DXVECTOR3 shipPos = D3DXVECTOR3(5.0f, 5.0f, 0.0f);
+#pragma endregion FPSstuff
 
-	//Load the ship texture
-	shipTexture = new cD3DXTexture(d3dMgr->getTheD3DDevice(), "Images\\ship.png");
-
-	LPDIRECT3DSURFACE9 aSurface;				// the Direct3D surface
+	
+#pragma region
 	LPDIRECT3DSURFACE9 theBackbuffer = NULL;  // This will hold the back buffer
 	
 	MSG msg;
 	ZeroMemory( &msg, sizeof( msg ) );
-
-	// Create the background surface
-	aSurface = d3dMgr->getD3DSurfaceFromFile("Images\\Nighttime.png");
-
+	
 	QueryPerformanceCounter((LARGE_INTEGER*)&previousTime);
+#pragma endregion Setup background
+
+	//Instantiates a new player object
+	InstantiateGameObjects();
 
 	while( msg.message!=WM_QUIT )
 	{
@@ -177,13 +197,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 		}
 		else
 		{
+
+#pragma region
 			// Game code goes here
 			QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
 			float dt = (currentTime - previousTime)*sPC;
 
 			// Accumulate how much time has passed.
 			timeElapsed += dt;
-				
+#pragma endregion fpsStuff
+
+			UpdateGameObjects();
+
 			/*
 			==============================================================
 			| Update the postion of the balloons and check for collisions
@@ -196,16 +221,22 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 				d3dMgr->beginRender();
 
 				theBackbuffer = d3dMgr->getTheBackBuffer();
-				d3dMgr->updateTheSurface(aSurface, theBackbuffer);
-				d3dMgr->releaseTheBackbuffer(theBackbuffer);
 			
+				screenMgr->Draw(theBackbuffer, d3dMgr);
+
 				d3dxSRMgr->beginDraw();
 				
+
+
+
 				//Draw in here
-				d3dxSRMgr->drawSprite(shipTexture->getTexture(), NULL, NULL, NULL, 0xFFFFFFFF);
+				player->Draw(d3dxSRMgr);
+
+
+
+
 
 				d3dxSRMgr->endDraw();
-
 				d3dMgr->endRender();
 
 				timeElapsed = 0.0f;
@@ -217,4 +248,27 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 	d3dxSRMgr->cleanUp();
 	d3dMgr->clean();
 	return (int) msg.wParam;
+}
+
+/*
+	instantiates the game objects
+*/
+void InstantiateGameObjects(){
+
+	player = new Ship("Images\\ship.png", d3dMgr, D3DXVECTOR3(clientBounds.left + 50, clientBounds.bottom / 2, 0));
+	screenMgr = new ScreenManager(d3dMgr);
+
+}
+
+/*
+	updates game objects
+*/
+void UpdateGameObjects()
+{
+	screenMgr->Update();
+
+
+	player->Update();
+
+
 }

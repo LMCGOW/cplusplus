@@ -83,6 +83,9 @@
     <ClCompile Include="cSprite.cpp" />
     <ClCompile Include="cXAudio.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="ScreenManager.cpp" />
+    <ClCompile Include="Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cBalloon.h" />
@@ -96,6 +99,9 @@
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="GameResources.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="ScreenManager.h" />
+    <ClInclude Include="Ship.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="DXUT.lib" />
