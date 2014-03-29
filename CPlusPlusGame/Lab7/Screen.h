@@ -3,21 +3,30 @@
 
 #include "GameConstants.h"
 #include "cD3DManager.h"
+#include "cD3DXSpriteMgr.h"
 
 class Screen{
 
-private:
+protected:
 
 	LPDIRECT3DSURFACE9 screen; //The screen that will be drawn
+	cD3DManager* d3dMgr; //The d3d manager
+	cD3DXSpriteMgr* d3dSRMgr; //The sprite manager
+
+private:
+
+	
+	
 
 public:
 
 	Screen();
-	Screen(LPDIRECT3DSURFACE9 theScreen); //Constructor
+	Screen(LPDIRECT3DSURFACE9 theScreen);
 	~Screen(); //Destructor
 
 	void Update();
-	void DrawSurface(LPDIRECT3DSURFACE9 theBackbuffer, cD3DManager* d3dMgr);
+	void Draw();
+	virtual void DrawSurface(LPDIRECT3DSURFACE9 theBackBuffer);
 
 };
 #endif

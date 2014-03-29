@@ -82,8 +82,9 @@
     <ClCompile Include="cExplosion.cpp" />
     <ClCompile Include="cSprite.cpp" />
     <ClCompile Include="cXAudio.cpp" />
+    <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="MenuScreen.cpp" />
     <ClCompile Include="ScreenManager.cpp" />
     <ClCompile Include="Ship.cpp" />
   </ItemGroup>
@@ -97,10 +98,14 @@
     <ClInclude Include="cSprite.h" />
     <ClInclude Include="cXAudio.h" />
     <ClInclude Include="GameConstants.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameResources.h" />
+    <ClInclude Include="GameScreen.h" />
+    <ClInclude Include="IGameScreen.h" />
+    <ClInclude Include="MenuScreen.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenManager.h" />
+    <ClInclude Include="Screens.h" />
     <ClInclude Include="Ship.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,12 @@
 #include "ScreenManager.h"
 
-ScreenManager::ScreenManager(cD3DManager* d3dMgr)
+ScreenManager::ScreenManager()
 {
 
-	activeScreenIndex = 0;
+	activeScreen = Menu; //Sets the initial screen
 
-	gameScreens[0] = Screen(d3dMgr->getD3DSurfaceFromFile("Images\\menu.png"));
-	gameScreens[1] = Screen(d3dMgr->getD3DSurfaceFromFile("Images\\background.png"));
+	menuScreen = MenuScreen();
+	gameScreen = GameScreen();
 
 }
 
@@ -16,35 +16,83 @@ ScreenManager::ScreenManager(cD3DManager* d3dMgr)
 void ScreenManager::Update()
 {
 
-	gameScreens[activeScreenIndex].Update();
+	switch(activeScreen){
+
+	case Menu:
+		menuScreen.Update();
+		break;
+	case Game:
+		gameScreen.Update();
+		break;
+	}
 
 }
 /*
 	draws the current screen
 */
-void ScreenManager::Draw(LPDIRECT3DSURFACE9 theBackbuffer, cD3DManager* d3dMgr)
+void ScreenManager::DrawSurface(LPDIRECT3DSURFACE9 theBackbuffer)
 {
+	
+	switch(activeScreen){
 
-	gameScreens[activeScreenIndex].DrawSurface(theBackbuffer, d3dMgr);
+	case Menu:
+		menuScreen.DrawSurface(theBackbuffer);
+		break;
+	case Game:
+		gameScreen.DrawSurface(theBackbuffer);
+		break;
+
+	}
+
+}
+
+void ScreenManager::Draw(){
+
+	switch(activeScreen){
+
+	case Menu:
+		menuScreen.Draw();
+		break;
+	case Game:
+		gameScreen.Draw();
+		break;
+
+	}
+
+}
+
+void ScreenManager::HandleInput(WPARAM wParam){
+
+	switch(activeScreen){
+
+	case Menu:
+		menuScreen.HandleInput(wParam);
+		break;
+	case Game:
+		gameScreen.HandleInput(wParam);
+		break;
+
+
+	}
 
 }
 
 /*
 	sets the active screen index
 */
-void ScreenManager::SetActiveScreen(int active)
+void ScreenManager::SetActiveScreen(Screens active)
 {
 
-	activeScreenIndex = active;
+	activeScreen= active;
 
 }
 
 /*
 	returns the active screen
 */
-int ScreenManager::ReturnActiveScreen()
+Screens ScreenManager::ReturnActiveScreen()
 {
 
-	return activeScreenIndex;
+	return activeScreen;
 
 }

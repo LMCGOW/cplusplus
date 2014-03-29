@@ -23,6 +23,7 @@ private:
 
 	//The d3d manager
 	cD3DManager* d3dMgr;
+	cD3DXSpriteMgr* spriteManager;
 
 	//The ship texture
 	cD3DXTexture* shipTexture;
@@ -31,12 +32,12 @@ private:
 public:
 
 	Ship(); //Default constructor
-	Ship(LPCSTR path, cD3DManager* d3dManager, D3DXVECTOR3 shipPosition); //Constructor with ship position
 	~Ship(); //Destructor
 
 	void Update(); //Update method
-	void Draw(cD3DXSpriteMgr* spriteManager); //Draw method
+	void Draw(); //Draw method
 	void HandleInput(WPARAM wParam); //Controls input
+	void Initialise();
 	
 };
 #endif

@@ -2,13 +2,12 @@
 
 Screen::Screen(){
 
-
 }
 
 Screen::Screen(LPDIRECT3DSURFACE9 theScreen){
 
+	d3dMgr = cD3DManager::getInstance();
 	screen = theScreen;
-	
 }
 
 Screen::~Screen(){
@@ -21,13 +20,13 @@ void Screen::Update(){
 
 }
 
-/*
-	Will draw the screens 
-*/
-void Screen::DrawSurface(LPDIRECT3DSURFACE9 theBackBuffer, cD3DManager* d3dMgr){
+void Screen::Draw(){
 
-	d3dMgr->updateTheSurface(screen, theBackBuffer);
-	d3dMgr->releaseTheBackbuffer(theBackBuffer);
+}
+
+void Screen::DrawSurface(LPDIRECT3DSURFACE9 theBackBuffer){
+
+	
 
 }
 

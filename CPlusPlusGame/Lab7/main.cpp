@@ -15,7 +15,6 @@ Main entry point for the Card application
 #include "cExplosion.h"
 #include "cXAudio.h"
 #include "cD3DXFont.h"
-#include "Ship.h"
 #include "ScreenManager.h"
 
 using namespace std;
@@ -32,8 +31,6 @@ static cD3DXSpriteMgr* d3dxSRMgr = cD3DXSpriteMgr::getInstance();
 RECT clientBounds; //The dimensions of the window
 
 TCHAR szTempOutput[30];
-
-Ship* player;
 
 ScreenManager* screenMgr;
 
@@ -59,12 +56,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_KEYDOWN:
 			{
 				if(wParam=='E'){
-					screenMgr->SetActiveScreen(1);
+					screenMgr->SetActiveScreen(Menu);
 				}else if(wParam =='B'){
-					screenMgr->SetActiveScreen(0);
+					screenMgr->SetActiveScreen(Game);
 				}
 
-				player->HandleInput(wParam);
+				screenMgr->HandleInput(wParam);
 
 				return 0;
 			}
@@ -216,25 +213,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 			*/
 			if(timeElapsed > fpsRate)
 			{
+				
+				
 
 				//render starts here
 				d3dMgr->beginRender();
 
 				theBackbuffer = d3dMgr->getTheBackBuffer();
 			
-				screenMgr->Draw(theBackbuffer, d3dMgr);
+				screenMgr->DrawSurface(theBackbuffer);
 
 				d3dxSRMgr->beginDraw();
-				
 
-
-
-				//Draw in here
-				player->Draw(d3dxSRMgr);
-
-
-
-
+				screenMgr->Draw();
 
 				d3dxSRMgr->endDraw();
 				d3dMgr->endRender();
@@ -255,8 +246,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 */
 void InstantiateGameObjects(){
 
-	player = new Ship("Images\\ship.png", d3dMgr, D3DXVECTOR3(clientBounds.left + 50, clientBounds.bottom / 2, 0));
-	screenMgr = new ScreenManager(d3dMgr);
+	screenMgr = new ScreenManager();
 
 }
 
@@ -266,9 +256,5 @@ void InstantiateGameObjects(){
 void UpdateGameObjects()
 {
 	screenMgr->Update();
-
-
-	player->Update();
-
 
 }
