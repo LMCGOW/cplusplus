@@ -12,6 +12,9 @@ Ship.h
 #include "cD3DXTexture.h"
 #include "cD3DXSpriteMgr.h"
 #include "cD3DManager.h"
+#include "GameInformation.h"
+#include "DirectInputHandler.h"
+#include "Timer.h"
 
 class Ship{
 
@@ -28,7 +31,6 @@ private:
 	//The ship texture
 	cD3DXTexture* shipTexture;
 
-
 public:
 
 	Ship(); //Default constructor
@@ -38,6 +40,12 @@ public:
 	void Draw(); //Draw method
 	void HandleInput(WPARAM wParam); //Controls input
 	void Initialise();
+
+	void CheckWithinBounds();
+
+	D3DXVECTOR3 GetPosition();
+
+	cD3DXTexture* GetTexture();
 	
 };
 #endif

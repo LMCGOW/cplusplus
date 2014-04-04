@@ -14,6 +14,7 @@ private:
 	MenuScreen menuScreen;
 	GameScreen gameScreen;
 
+	//I'm the Batman
 #pragma endregion Screens
 
 	Screens activeScreen; //Stores the active screen
@@ -28,6 +29,7 @@ public:
 	void Draw();
 	void SetActiveScreen(Screens active); //Will set the active screen
 	void HandleInput(WPARAM wParam);
+	void KeyboardPressed();
 	
 	Screens ReturnActiveScreen(); //Will return the active screen
 

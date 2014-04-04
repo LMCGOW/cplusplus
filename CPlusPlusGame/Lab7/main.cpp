@@ -16,6 +16,7 @@ Main entry point for the Card application
 #include "cXAudio.h"
 #include "cD3DXFont.h"
 #include "ScreenManager.h"
+#include "RawInput.h"
 
 using namespace std;
 
@@ -33,7 +34,6 @@ RECT clientBounds; //The dimensions of the window
 TCHAR szTempOutput[30];
 
 ScreenManager* screenMgr;
-
 
 #pragma region
 void InstantiateGameObjects();
@@ -53,13 +53,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	// Check any available messages from the queue
 	switch (message)
 	{
-	case WM_KEYDOWN:
+		case WM_KEYDOWN:
 			{
 				if(wParam=='E'){
 					screenMgr->SetActiveScreen(Menu);
 				}else if(wParam =='B'){
 					screenMgr->SetActiveScreen(Game);
 				}
+
+				if(wParam == 'C')
+					screenMgr->KeyboardPressed();
 
 				screenMgr->HandleInput(wParam);
 
@@ -77,7 +80,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				PostQuitMessage(0);
 				return 0;
 			}
+
 	}
+
 	// Always return the message to the default window
 	// procedure for further processing
 	return DefWindowProc(hWnd, message, wParam, lParam);
@@ -102,21 +107,21 @@ bool initWindow( HINSTANCE hInstance )
 	wcex.cbWndExtra = 0; // extra bytes to allocate for this instance
 	wcex.hInstance = hInstance; // handle to the application instance
 	wcex.hIcon = LoadIcon(hInstance,MAKEINTRESOURCE(IDI_MyWindowIcon)); // icon to associate with the application
-	wcex.hCursor = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_GUNSIGHT));// the default cursor
+	wcex.hCursor = LoadCursor(hInstance, IDC_ARROW);// the default cursor
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW+1); // the background color
 	wcex.lpszMenuName = NULL; // the resource name for the menu
-	wcex.lpszClassName = "Balloons"; // the class name being created
+	wcex.lpszClassName = "SpaceBattle"; // the class name being created
 	wcex.hIconSm = LoadIcon(hInstance,"Balloon.ico"); // the handle to the small icon
 
 	RegisterClassEx(&wcex);
 	// Create the window
-	wndHandle = CreateWindow("Balloons",			// the window class to use
-							 "Balloon Burst",			// the title bar text
+	wndHandle = CreateWindow("SpaceBattle",			// the window class to use
+							 "Space Battle",			// the title bar text
 							WS_OVERLAPPEDWINDOW,	// the window style
 							CW_USEDEFAULT, // the starting x coordinate
 							CW_USEDEFAULT, // the starting y coordinate
-							800, // the pixel width of the window
-							600, // the pixel height of the window
+							1000, // the pixel width of the window
+							680, // the pixel height of the window
 							NULL, // the parent window; NULL for desktop
 							NULL, // the menu for the application; NULL for none
 							hInstance, // the handle to the application instance
@@ -124,6 +129,7 @@ bool initWindow( HINSTANCE hInstance )
 	// Make sure that the window handle that is created is valid
 	if (!wndHandle)
 		return false;
+
 	// Display the window on the screen
 	ShowWindow(wndHandle, SW_SHOW);
 	UpdateWindow(wndHandle);
@@ -150,6 +156,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 	if ( !d3dxSRMgr->initD3DXSpriteMgr(d3dMgr->getTheD3DDevice()))
 		return false;
 #pragma endregion initialisationStuff
+
 
 
 #pragma region 
@@ -204,8 +211,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 			timeElapsed += dt;
 #pragma endregion fpsStuff
 
-			UpdateGameObjects();
-
 			/*
 			==============================================================
 			| Update the postion of the balloons and check for collisions
@@ -214,7 +219,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLi
 			if(timeElapsed > fpsRate)
 			{
 				
-				
+				UpdateGameObjects();
 
 				//render starts here
 				d3dMgr->beginRender();

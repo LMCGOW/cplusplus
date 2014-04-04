@@ -1,6 +1,9 @@
 #ifndef _GAMECONSTANTS_H
 #define _GAMECONSTANTS_H
 
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
+
 // Include the Windows header file that’s needed for all Windows applications
 #include <windows.h>
 #include <d3d9.h>

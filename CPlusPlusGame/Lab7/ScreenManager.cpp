@@ -96,3 +96,11 @@ Screens ScreenManager::ReturnActiveScreen()
 	return activeScreen;
 
 }
+
+void ScreenManager::KeyboardPressed(){
+
+	if(activeScreen == Game){
+		gameScreen.CreateBullet();
+	}
+
+}
